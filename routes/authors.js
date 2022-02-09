@@ -16,6 +16,7 @@ router.get('/', async(req, res)=>{
         res.redirect('/')
     }
 })
+
 // GET NEW AUTHORS
 router.get('/new', (req, res)=>{
     res.render('authors/new', {author : new Author()})
@@ -27,9 +28,11 @@ router.post('/', async(req, res)=>{
     })
     try{
         const newAuthor = await author.save()
-        res.redirect('authors')
+        res.redirect('authors');
+        console.log('true')
     }catch{
         res.render('authors/new',{author : author})
+        console.log('fasl')
     }
    
 }) 

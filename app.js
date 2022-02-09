@@ -6,18 +6,20 @@ const express       = require('express'),
       layouts       = require('express-ejs-layouts'),
       routerIndex   = require('./routes/index'),
       routerAuthors = require('./routes/authors'),
+      routerBook    = require('./routes/books')
       connect_DB    = require('./db/connect');
 
 app.set('view engine' ,'ejs'),
-//app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/views');
 app.set('layout' ,'layouts/layout');
 
 app.use(layouts);
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', routerIndex);
-app.use('/authors', routerAuthors)
+app.use('/authors', routerAuthors),
+app.use('/books', routerBook)
 
 connect_DB();
 app.listen(prot,()=>{console.log('SERVER RUNNING...')})
