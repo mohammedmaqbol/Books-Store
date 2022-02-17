@@ -17,11 +17,12 @@ router.get('/', async(req, res)=>{
     }
 })
 
-// GET NEW AUTHORS
+// GET AUTHORS
 router.get('/new', (req, res)=>{
     res.render('authors/new', {author : new Author()})
 })
 
+//CREATE NEW AUTHOR
 router.post('/', async(req, res)=>{
     const author = new Author({
         name : req.body.name
@@ -29,11 +30,56 @@ router.post('/', async(req, res)=>{
     try{
         const newAuthor = await author.save()
         res.redirect('authors');
-        console.log('true')
     }catch{
         res.render('authors/new',{author : author})
-        console.log('fasl')
     }
    
-}) 
+})
+// GET AUTHOR
+router.get('/:id', (req, res)=>{
+    res.send('Show Author' + req.params.id)
+})
+
+// EDIT AUTHOR
+router.get(':/id/edit', async (res, req)=>{
+    try{
+            const author =  await Author.findById(req.params.id)
+            res.render(`authors/edit`,{auhtor: auhtor})
+    }catch{
+            res.redirect('/auhtors')
+    }
+    res.send('Edit Author'+ req.params.id)
+})
+// UPDATE AUTHOR
+router.put(':id/', async(req, res)=>{
+    let author
+    try{
+         author = await Author.findById(req.params.id)
+         author.name   = req.body.name
+        await author.save()
+        res.redirect(`/authors/${author.id}`);
+    }catch{
+        if(author == null){
+            res.redirect('/')
+        }else{
+            res.render('authors/edit',{author : author})
+        }
+        
+    }
+})
+// DELETE AUTHOR
+router.delete('/:id', async(req, res)=>{
+    let author
+    try{
+        author = await Author.findById(req.params.id)
+        await author.remove()
+        res.redirect('/authors');
+    }catch{
+        if(author == null){
+            res.redirect('/')
+        }else {
+            res.redirect(`/authors/${author.id}`)
+        }
+    }
+})
 module.exports = router;
